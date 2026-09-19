@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@langchain/core": "^1.2.4",
+    "@langchain/google": "^0.2.1",
+    "@langchain/google-genai": "^2.3.2",
+    "@langchain/mistralai": "^1.2.0",
+    "@tavily/core": "^0.7.13",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "googleapis": "^131.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "langchain": "^1.5.4",
+    "mongoose": "^9.9.1",
+    "morgan": "^1.11.0",
+    "nodemailer": "^9.0.3",
+    "socket.io": "^4.8.3",
+    "zod": "^4.6.5"
+  }
+}
