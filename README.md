@@ -1,6 +1,6 @@
 # QueryFlow
 
-QueryFlow is a full-stack AI-powered chat application that combines secure authentication, persistent chat history, and real-time AI responses with live internet search support. The app is designed as a modern portfolio-ready project and demonstrates end-to-end full-stack development with React, Node.js, MongoDB, Socket.IO, and AI APIs.
+QueryFlow is an AI-powered chat assistant application that combines secure authentication, persistent chat history, and real-time AI responses with live internet search support. The app is designed as a modern portfolio-ready project and demonstrates end-to-end full-stack development with React, Node.js, MongoDB, Socket.IO, and AI APIs.
 
 ## Overview
 
@@ -8,7 +8,7 @@ QueryFlow lets users:
 
 - Create an account and log in securely
 - Verify their email before using the app
-- Start new AI chats and continue previous conversations
+- Start new AI chat sessions and continue previous conversations
 - Send prompts to an AI assistant powered by Google Gemini
 - Use live web search when the user asks for current/latest information
 - Receive responses in a chat-style interface with markdown rendering
