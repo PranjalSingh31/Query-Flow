@@ -10,10 +10,13 @@ export function useAuth(){
     {
         try{
             dispatch(setLoading(true))
-            await register({email,username,password})
+            dispatch(setError(null))
+            return await register({email,username,password})
         }catch(error)
         {
-            dispatch(setError(error.response?.data?.message || "Registration failed"))
+            const details = error.response?.data?.errors?.map((item) => item.msg).join(', ')
+            dispatch(setError(error.response?.data?.message || details || "Registration failed"))
+            return null
         } finally{
             dispatch(setLoading(false))
         }
@@ -23,6 +26,7 @@ export function useAuth(){
     {
         try{
             dispatch(setLoading(true))
+            dispatch(setError(null))
             const data = await login({email,password})
             dispatch(setUser(data.user))
             return true
@@ -38,6 +42,7 @@ export function useAuth(){
     async function handleGetMe(){
         try{
             dispatch(setLoading(true))
+            dispatch(setError(null))
             const data = await getMe()
             dispatch(setUser(data.user))
             dispatch(setError(null))

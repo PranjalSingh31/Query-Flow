@@ -1,21 +1,27 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router'
+import { useSelector } from 'react-redux'
+import { useAuth } from '../hook/useAuth'
 
 const Register = () => {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const [verificationUrl, setVerificationUrl] = useState('')
+  const loading = useSelector((state) => state.auth.loading)
+  const error = useSelector((state) => state.auth.error)
+  const { handleRegister } = useAuth()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-
-    const formData = {
-      email,
-      username,
-      password,
+    setMessage('')
+    setVerificationUrl('')
+    const result = await handleRegister({ email, username, password })
+    if (result?.success) {
+      setMessage(result.message || 'Account created. Verify your email before logging in.')
+      setVerificationUrl(result.verificationUrl || '')
     }
-
-    console.log(formData)
   }
 
   return (
@@ -71,11 +77,20 @@ const Register = () => {
           />
         </div>
 
+        {error && <p role="alert" className="mb-4 text-sm text-red-300">{error}</p>}
+        {message && <p role="status" className="mb-4 text-sm text-cyan-100">{message}</p>}
+        {verificationUrl && (
+          <a className="mb-4 block text-sm font-semibold text-cyan-300 underline" href={verificationUrl}>
+            Verify this account on this computer
+          </a>
+        )}
+
         <button
           type="submit"
+          disabled={loading}
           className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 py-3 font-semibold text-slate-950 transition hover:from-blue-400 hover:to-cyan-300"
         >
-          Register
+          {loading ? 'Creating account…' : 'Register'}
         </button>
 
         <p className="mt-6 text-center text-sm text-cyan-100/70">

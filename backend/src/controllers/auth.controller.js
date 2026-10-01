@@ -34,30 +34,40 @@ export async function register(req,res){
 
     //res.cookie("token",emailVerificationToken)
 
-    await sendEmail({
-        to: email,
-        subject: "Welcome to QueryFlow!",
-        html: `
+    const verificationUrl = `http://localhost:3000/api/auth/verify-email?token=${encodeURIComponent(emailVerificationToken)}`
+    try {
+        await sendEmail({
+            to: email,
+            subject: "Welcome to QueryFlow!",
+            html: `
                 <p>Hi ${username},</p>
                 <p>Thank you for registering at <strong>QueryFlow</strong>. We're excited to have you on board!</p>
                 <p>Please verify your email address by clicking the link below:</p>
-                <a href="http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}">Verify Email</a>
+                <a href="${verificationUrl}">Verify Email</a>
                 <p>If you did not sign up for this account, please ignore this email.</p>
                 <p>Thank you,<br>The QueryFlow Team</p>
                 
                 
                 
-        `
-    })
+            `
+        })
+    } catch (error) {
+        // Local development often has no mail credentials. Return the verification
+        // link so the account created above can still be activated during testing.
+        if (process.env.NODE_ENV === "production") {
+            console.error("Verification email could not be sent:", error?.message || error)
+        }
+    }
 
     res.status(201).json({
-        message: "User registered successfully",
         success: true,
         user: {
             id: user._id,
             username: user.username,
             email: user.email
-        }
+        },
+        message: "User registered successfully. Verify your email before logging in.",
+        ...(process.env.NODE_ENV !== "production" ? { verificationUrl } : {})
     });
 }
 
@@ -66,6 +76,7 @@ export async function register(req,res){
 export async function verifyEmail(req,res)
 {
     const {token} = req.query
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173"
 
     if (!token) {
         return res.status(400).json({
@@ -116,7 +127,7 @@ export async function verifyEmail(req,res)
         const alreadylogin =`
             <h1>Email Already Verified</h1>
             <p>Your email address has already been verified.</p>
-            <a href="http://localhost:3000/login">Go to Login</a>
+            <a href="${frontendUrl}/login">Go to Login</a>
         `
         return res.send(alreadylogin)
 
@@ -131,7 +142,7 @@ export async function verifyEmail(req,res)
         <h1>Email Verified Successfully</h1>
         <p>Thank you for verifying your email address. Your account is now active.</p>
         <p>You can now log in to your account and start using our services.</p>
-        <a href="http://localhost:3000/login">Go to Login</a>
+        <a href="${frontendUrl}/login">Go to Login</a>
     `
     res.send(html)
 
@@ -300,5 +311,3 @@ export async function resendVerificationEmail(req,res)
     });
 
 }
-
-
